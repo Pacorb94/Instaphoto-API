@@ -18,7 +18,7 @@ El usuario puede buscar imágenes.
 ## Pasos a seguir
 1. En un sistema gestor de bbdd importar database.sql de la carpeta database
 2. `composer install`
-3. Si no tienes XAMPP puedes usar `php artisan serve`
+3. Si no tienes XAMPP puedes usar `php artisan serve` sino despliega en htdocs
 
 ## Licencia
 MIT
