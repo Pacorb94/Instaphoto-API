@@ -14,5 +14,3 @@ yarn-error.log
 /.idea
 /.vscode
 /database/Modelo relacional.png
-/storage/app/users/images/*.jpg
-/storage/app/users/profile-images/*.jpg
