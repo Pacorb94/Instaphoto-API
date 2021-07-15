@@ -13,7 +13,7 @@ El usuario puede buscar imágenes.
 ## Requisitos
 * Composer 2
 * MySQL o MariaDB
-* PHP 8 (puedes probar con la versión que tengas)
+* PHP 8 (puedes probar tu versión)
 
 ## Pasos a seguir
 1. En un sistema gestor de bbdd importar database.sql de la carpeta database
