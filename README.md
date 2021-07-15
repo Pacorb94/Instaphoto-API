@@ -18,7 +18,8 @@ El usuario puede buscar imágenes.
 ## Pasos a seguir
 1. En un sistema gestor de bbdd importar database.sql de la carpeta database
 2. `composer install`
-3. Si no tienes XAMPP puedes usar `php artisan serve` sino despliega en htdocs
+3. Crea una carpeta llamada "users" en storage/app/ y dentro 2 más (images y profile-images)
+4. Si no tienes XAMPP puedes usar `php artisan serve` sino despliega en htdocs
 
 ## Licencia
 MIT
