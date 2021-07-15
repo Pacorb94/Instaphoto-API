@@ -1,3 +1,5 @@
 *
 !public/
+!users/images/
+!users/profile-images
 !.gitignore
