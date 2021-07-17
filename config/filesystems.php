@@ -54,13 +54,13 @@ return [
         ],
         'profile-images' => [
             'driver' => 'local',
-            'root' => storage_path('app/users/profile-images'),
+            'root' => storage_path('app/profile-images'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
         'images' => [
             'driver' => 'local',
-            'root' => storage_path('app/users/images'),
+            'root' => storage_path('app/images'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ]
