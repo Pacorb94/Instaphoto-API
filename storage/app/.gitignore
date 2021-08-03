@@ -1,2 +1,6 @@
+images/*
+profile-images/*
+!images/.gitkeep
+!profile-images/.gitkeep
 !public/
 !.gitignore
