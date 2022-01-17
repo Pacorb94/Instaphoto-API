@@ -10,31 +10,24 @@ class Image extends Model
     use HasFactory;
     protected $table='images';
     
+
     /**
-     * Función que obtiene los comentarios ordenados de una imagen
-     * @return
+     * The attributes that are mass assignable.
+     *
+     * @var array
      */
+    protected $fillable = [
+        'image',
+        'description'
+    ];
+
     public function getComments()
     {
-        return $this->hasMany('App\Models\Comment')->orderBy('id', 'desc');
+        return $this->hasMany('App\Models\Comment', 'image_id', 'id');
     }
 
-    /**
-     * Función que obtiene los likes de una imagen
-     * @return
-     */
     public function getLikes()
     {
-        return $this->hasMany('App\Models\Like');
-    }
-
-    /**
-     * Función que obtiene el usuario que creó la imagen,
-     * como es sólo 1 es "belongsTo"
-     * @return
-     */
-    public function getUser()
-    {
-        return $this->belongsTo('App\Models\User', 'user_id');
+        return $this->hasMany('App\Models\Like', 'image_id', 'id');
     }
 }

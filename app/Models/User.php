@@ -18,8 +18,6 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $fillable = [
         'role',
-        'name',
-        'surname',
         'nick',
         'email',
         'password',
@@ -36,13 +34,10 @@ class User extends Authenticatable implements JWTSubject
         'remember_token',
     ];
 
-    /**
-     * Función que obtiene todas las imágenes
-     * @return
-     */
+
     public function getImages()
     {
-        return $this->hasMany('App\Models\Image');
+        return $this->hasMany('App\Models\Image', 'user_id', 'id');
     }
 
     public function getJWTIdentifier()
