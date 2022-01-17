@@ -23,11 +23,11 @@ class Image extends Model
 
     public function getComments()
     {
-        return $this->hasMany('App\Models\Comment')->orderBy('id', 'desc');
+        return $this->hasMany('App\Models\Comment', 'image_id', 'id');
     }
 
     public function getLikes()
     {
-        return $this->hasMany('App\Models\Like')->orderBy('id', 'desc');
+        return $this->hasMany('App\Models\Like', 'image_id', 'id');
     }
 }
