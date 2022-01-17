@@ -13,29 +13,33 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-//User
+
+
 Route::post('/register', 'App\Http\Controllers\UserController@register');
 Route::post('/login', 'App\Http\Controllers\UserController@login');
+
 Route::middleware('jwt')->group(function () {
     //User
-    Route::put('/users/{id}/update', 'App\Http\Controllers\UserController@update');
-    Route::post('/profile-image/upload', 'App\Http\Controllers\UserController@uploadProfileImage');
-    Route::get('/profile-images/{imageName}', 'App\Http\Controllers\UserController@getProfileImage');
+    Route::post('/users/{id}/profile-image', 'App\Http\Controllers\UserController@uploadProfileImage');
+    Route::get('/users/profile-images/{imageName}', 
+        'App\Http\Controllers\UserController@getProfileImage'
+    );
     Route::get('/users/{id}', 'App\Http\Controllers\UserController@getUser');
-    Route::get('/search/users/{search?}', 'App\Http\Controllers\UserController@findUsers');
+    Route::get('/users/search/{id}', 'App\Http\Controllers\UserController@searchUsers');
+    Route::put('/users/{id}', 'App\Http\Controllers\UserController@update');
 
     //Image
-    Route::post('/image/upload', 'App\Http\Controllers\ImageController@upload');
+    Route::post('/image', 'App\Http\Controllers\ImageController@upload');
     Route::get('/images', 'App\Http\Controllers\HomeController@getImages');
-    Route::put('/images/{id}/update', 'App\Http\Controllers\ImageController@update');
-    Route::delete('/images/{id}/delete', 'App\Http\Controllers\ImageController@delete');
+    Route::put('/images/{id}', 'App\Http\Controllers\ImageController@update');
+    Route::delete('/images/{id}', 'App\Http\Controllers\ImageController@delete');
 
     //Comment
-    Route::post('{imageId}/comment/create', 'App\Http\Controllers\CommentController@create');
-    Route::delete('/comments/{id}/delete', 'App\Http\Controllers\CommentController@delete');
+    Route::post('/images/{imageId}/comment', 'App\Http\Controllers\CommentController@create');
+    Route::delete('/comments/{id}', 'App\Http\Controllers\CommentController@delete');
 
     //Like
-    Route::post('/like/{imageId}', 'App\Http\Controllers\LikeController@like');
+    Route::post('/images/{imageId}/like', 'App\Http\Controllers\LikeController@giveLike');
     Route::get('/likes', 'App\Http\Controllers\LikeController@getLikes');
-    Route::delete('/dislike/{imageId}', 'App\Http\Controllers\LikeController@dislike');
+    Route::delete('/images/{imageId}/dislike', 'App\Http\Controllers\LikeController@giveDislike');
 });
