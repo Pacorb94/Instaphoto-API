@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use App\Models\User;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
@@ -17,33 +19,16 @@ class UserController extends Controller
      * @param $request
      * @return
      */
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
-        //Decodificamos el json a un array con el parámetro true
-        $decodedRequest = json_decode($request->input('json', null), true);
-        //Si se decodificó bien
-        if ($decodedRequest) {
-            $validator = $this->validations($decodedRequest, 'register');
-            if ($validator->fails()) return response($validator->errors(), 400);
-            $userExists=User::where('email', $decodedRequest['email'])->count();
-            //Si no existe el usuario
-            if ($userExists==0) {
-                //Quitamos los espacios de delante y detrás
-                $decodedRequest = array_map('trim', $decodedRequest);
-                $user = new User();
-                $user->role = 'User';
-                $user->name = $decodedRequest['name'];
-                $user->surname = $decodedRequest['surname'];
-                $user->nick = $decodedRequest['nick'];
-                $user->email = $decodedRequest['email'];
-                //Ciframos la contraseña
-                $user->password = hash('sha256', $decodedRequest['password']);
-                $user->save();
-                return response($user, 201);
-            }
-            return response(['message'=>'That user already exists'], 500);
-        }
-        return response(['message' => 'Wrong json'], 400);
+        //Obtenemos los datos validados
+        $data=$request->validated();
+        $data=array_map('trim', $data);
+        //Ciframos la contraseña
+        $data['password']=hash('sha256', $data['password']);
+        $user=new User($data);
+        $user->save();
+        return response(new UserResource($user), 201); 
     }
 
     /**
@@ -51,27 +36,14 @@ class UserController extends Controller
      * @param $request
      * @return
      */
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        //Decodificamos el json a un array con el parámetro true
-        $decodedRequest = json_decode($request->input('json', null), true);
-        //Si se decodificó bien
-        if ($decodedRequest) {
-            $validator = $this->validations($decodedRequest, 'login');
-            if ($validator->fails()) return response($validator->errors(), 400);
-            //Quitamos los espacios de delante y detrás
-            $decodedRequest = array_map('trim', $decodedRequest);
-            $encryptedPassword = hash('sha256', $decodedRequest['password']);
-            $user = User::where(['email' => $decodedRequest['email'], 'password' => $encryptedPassword])
-                ->first();
-            //Si existe el usuario creamos el token        
-            if ($user) {
-                $token = JWTAuth::fromUser($user);
-                return response(['user' => $user, 'token' => $token]);
-            }
-            return response(['message' => 'Wrong login'], 404);
-        }
-        return response(['message' => 'Wrong json'], 400);
+        //Obtenemos los datos validados
+        $data=$request->validated();
+        //Quitamos los espacios
+        $data=array_map('trim', $data);
+        //TODO: ver Laravel Santum
+        return response('token'); 
     }
 
     /**
@@ -161,7 +133,7 @@ class UserController extends Controller
      * @param $search
      * @return
      */
-    public function findUsers($search=null)
+    public function searchUsers($search=null)
     {
         if ($search) {
             //orWhere es un or
