@@ -11,21 +11,11 @@ class Comment extends Model
     protected $table='comments';
 
     /**
-     * Función que obtiene la imagen de la que se está comentando,
-     * como es sólo 1 es "belongsTo"
-     * @return
+     * The attributes that are mass assignable.
+     *
+     * @var array
      */
-    public function getImage()
-    {
-        return $this->belongsTo('App\Models\Image', 'image_id');
-    }
-
-    /**
-     * Función que obtiene el usuario que creó el comentario
-     * @return
-     */
-    public function getUser()
-    {
-        return $this->belongsTo('App\Models\User', 'user_id');
-    }
+    protected $fillable = [
+        'content'
+    ];
 }
