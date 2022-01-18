@@ -18,13 +18,13 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', 'App\Http\Controllers\UserController@register');
 Route::post('/login', 'App\Http\Controllers\UserController@login');
 
-Route::middleware('jwt')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     //User
     Route::post('/users/{id}/profile-image', 'App\Http\Controllers\UserController@uploadProfileImage');
-    Route::get('/users/profile-images/{imageName}', 
+    Route::get(
+        '/users/profile-images/{imageName}',
         'App\Http\Controllers\UserController@getProfileImage'
     );
-    Route::get('/users/{id}', 'App\Http\Controllers\UserController@getUser');
     Route::get('/users/search/{id}', 'App\Http\Controllers\UserController@searchUsers');
     Route::put('/users/{id}', 'App\Http\Controllers\UserController@update');
 
