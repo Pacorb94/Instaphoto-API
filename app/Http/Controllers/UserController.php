@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -22,13 +23,13 @@ class UserController extends Controller
     public function register(RegisterRequest $request)
     {
         //Obtenemos los datos validados
-        $data=$request->validated();
-        $data=array_map('trim', $data);
+        $data = $request->validated();
+        $data = array_map('trim', $data);
         //Ciframos la contraseña
-        $data['password']=hash('sha256', $data['password']);
-        $user=new User($data);
+        $data['password'] = hash('sha256', $data['password']);
+        $user = new User($data);
         $user->save();
-        return response(new UserResource($user), 201); 
+        return response(new UserResource($user), 201);
     }
 
     /**
@@ -39,41 +40,32 @@ class UserController extends Controller
     public function login(LoginRequest $request)
     {
         //Obtenemos los datos validados
-        $data=$request->validated();
-        //Quitamos los espacios
-        $data=array_map('trim', $data);
-        //TODO: ver Laravel Santum
-        return response('token'); 
+        $data = $request->validated();
+        $data = array_map('trim', $data);
+        $user = User::where([
+            'email' => $data['email'], 
+            'password' => $data['password']
+        ])->get();
+        if ($user) {
+            $token = $user->createToken('auth_token')->plainTextToken;
+            return response(['token' => $token]);
+        }
+        return response(['message' => 'Wrong credentials'], 422);
     }
 
     /**
      * Función que modifica un usuario
+     * @param $user
      * @param $request
      * @return
      */
-    public function update($id, Request $request)
+    public function update($user, UpdateUserRequest $request)
     {
-        //Si el id de la petición es igual al del usuario logueado
-        if ($id && is_numeric($id) && $id == auth()->user()->id) {
-            //Decodificamos el json a un array con el parámetro true
-            $decodedRequest = json_decode($request->input('json', null), true);
-            //Quitamos los espacios de delante y detrás
-            $decodedRequest = array_map('trim', $decodedRequest);
-            if ($decodedRequest) {
-                $validator = $this->validations($decodedRequest, 'update');
-                if ($validator->fails()) return response($validator->errors(), 400);
-                //Si el usuario no modifica algún campo será el por defecto
-                $decodedRequest['name']??auth()->user()->name;
-                $decodedRequest['surname']??auth()->user()->surname;
-                $decodedRequest['email']??auth()->user()->email;
-                $decodedRequest['nick']??auth()->user()->nick;
-                //Con tap podemos devolver el usuario modificado
-                $userUpdated=tap(User::find(auth()->user()->id))->update($decodedRequest);
-                if ($userUpdated) return response($userUpdated);
-            }
-            return response(['message' => 'Wrong json'], 400);
-        }
-        return response(['message' => 'Wrong id'], 400);
+        //Modificamos la columna updated_at
+        $user->touch();
+        //Con tap obtenemos el usuario modificado
+        $userUpdated=tap($user)->update($request->validated());
+        return response(new UserResource($userUpdated));
     }
 
     /**
@@ -83,15 +75,15 @@ class UserController extends Controller
      */
     public function uploadProfileImage(Request $request)
     {
-        $validator=$this->validations($request->all(), 'uploadProfileImage');
+        $validator = $this->validations($request->all(), 'uploadProfileImage');
         if ($validator->fails()) return response($validator->errors(), 400);
-        $image=$request->file('file0');
+        $image = $request->file('file0');
         //Debemos configurar la fecha y tiempo
         date_default_timezone_set('Europe/Madrid');
-        $imageName=date('d-m-Y_H-i-s').'_'.$image->getClientOriginalName();
+        $imageName = date('d-m-Y_H-i-s') . '_' . $image->getClientOriginalName();
         //Almacenamos la imagen en la carpeta
         Storage::disk('profile-images')->put($imageName, File::get($image));
-        return response(['image'=>$imageName], 201);
+        return response(['image' => $imageName], 201);
     }
 
     /**
@@ -102,49 +94,33 @@ class UserController extends Controller
     public function getProfileImage($imageName)
     {
         if ($imageName) {
-            $exists=Storage::disk('profile-images')->exists($imageName);
+            $exists = Storage::disk('profile-images')->exists($imageName);
             if ($exists) {
-                $image=Storage::disk('profile-images')->get($imageName);
+                $image = Storage::disk('profile-images')->get($imageName);
                 return new Response($image);
-            } 
-            return response(['message'=>'No exists an image with that name'], 404); 
+            }
+            return response(['message' => 'No exists an image with that name'], 404);
         }
-        return response(['message'=>'You must send an image name'], 400);
+        return response(['message' => 'You must send an image name'], 400);
     }
 
     /**
-     * Función que obtiene un usuario
-     * @param $id
-     * @return
-     */
-    public function getUser($id)
-    {
-        if ($id&&is_numeric($id)) {
-            $user=User::find($id);
-            //Si existe y es el mismo que se ha logueado
-            if ($user&&$user->id==auth()->user()->id) return response($user);         
-            return response(['message'=>'Wrong user'], 500);
-        }
-        return response(['message'=>'Wrong id'], 400);
-    }
-
-     /**
      * Función que busca usuarios por una palabra
      * @param $search
      * @return
      */
-    public function searchUsers($search=null)
+    public function searchUsers($search = null)
     {
         if ($search) {
             //orWhere es un or
-            $users=User::where('nick', 'like' , "%$search%")
-                        ->orWhere('name', 'like', "%$search%")
-                        ->orWhere('surname', 'like', "%$search%")
-                        ->orderBy('id', 'desc')->paginate(5);
+            $users = User::where('nick', 'like', "%$search%")
+                ->orWhere('name', 'like', "%$search%")
+                ->orWhere('surname', 'like', "%$search%")
+                ->orderBy('id', 'desc')->paginate(5);
         } else {
-            $users=User::orderBy('id', 'desc')->paginate(5);
+            $users = User::orderBy('id', 'desc')->paginate(5);
         }
-        return response($users);             
+        return response($users);
     }
 
     /**
@@ -182,16 +158,16 @@ class UserController extends Controller
                     'surname' => 'regex:/^[a-zA-ZñáéíóúÑÁÉÍÓÚ ]*$/',
                     /*Si el usuario no modifica el email no fallará ya que unique hará una excepción
                     gracias al id*/
-                    'email' => 'email|unique:users,email,'.auth()->user()->id,
+                    'email' => 'email|unique:users,email,' . auth()->user()->id,
                     //Igual que el email
-                    'nick'=>'unique:users,nick,'.auth()->user()->id
+                    'nick' => 'unique:users,nick,' . auth()->user()->id
                 ]
             );
-        }else if($nameFunction=='uploadProfileImage'){
-            $validator=Validator::make(
+        } else if ($nameFunction == 'uploadProfileImage') {
+            $validator = Validator::make(
                 $request,
                 [
-                    'file0'=>'required|image|mimes:jpg,jpeg,png,gif'
+                    'file0' => 'required|image|mimes:jpg,jpeg,png,gif'
                 ]
             );
         }
