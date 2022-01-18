@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Comment extends Model
 {
     use HasFactory;
-    protected $table='comments';
+    protected $table = 'comments';
 
-    
+
     /**
      * The attributes that are mass assignable.
      *
