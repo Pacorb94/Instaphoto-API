@@ -25,7 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
         '/users/profile-images/{imageName}',
         'App\Http\Controllers\UserController@getProfileImage'
     );
-    Route::get('/users/search/{id}', 'App\Http\Controllers\UserController@searchUsers');
+    Route::get('/users/search/{user}', 'App\Http\Controllers\UserController@searchUsers');
     Route::put('/users/{id}', 'App\Http\Controllers\UserController@update');
 
     //Image
