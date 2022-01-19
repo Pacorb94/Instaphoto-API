@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+
 class UpdateUserRequest extends FormRequest
 {
     /**
@@ -26,7 +27,7 @@ class UpdateUserRequest extends FormRequest
         $user=auth()->user();
         return [
             'nick' => 'required|unique:users,nick,'.$user->id,
-            'email' => 'required|unique:users,email,'.$user->id,
+            'email' => 'required|email|unique:users,email,'.$user->id,
             'password' => 'required',
             'profile_image'=>'required|image|mimes:jpg,jpeg,png,gif'
         ];
