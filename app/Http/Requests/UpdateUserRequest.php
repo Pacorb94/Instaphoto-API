@@ -26,10 +26,10 @@ class UpdateUserRequest extends FormRequest
     {
         $user=auth()->user();
         return [
-            'nick' => 'required|unique:users,nick,'.$user->id,
-            'email' => 'required|email|unique:users,email,'.$user->id,
-            'password' => 'required',
-            'profile_image'=>'required|image|mimes:jpg,jpeg,png,gif'
+            'nick' => 'sometimes|required|unique:users,nick,'.$user->id,
+            'email' => 'sometimes|required|email|unique:users,email,'.$user->id,
+            'password' => 'sometimes|required',
+            'profileImage'=>'sometimes|required|image|mimes:jpg,jpeg,png,gif'
         ];
     }
 }
