@@ -22,8 +22,7 @@ class UserResource extends JsonResource
             'password' => $this->password,
             'image' => $this->image,
             'createdAt' => $this->created_at,
-            'updatedAt' => $this->updated_at,
-            'images' => ImageResource::collection($this->images)
+            'updatedAt' => $this->updated_at
         ];
     }
 }
