@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,19 +13,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
 Route::post('/register', 'App\Http\Controllers\UserController@register');
 Route::post('/login', 'App\Http\Controllers\UserController@login');
 
 Route::middleware('auth:sanctum')->group(function () {
     //User
-    Route::post('/users/{user}/profile-image', 'App\Http\Controllers\UserController@uploadProfileImage');
+    Route::post('/profile-image', 'App\Http\Controllers\UserController@uploadProfileImage');
     Route::get(
-        '/users/profile-images/{imageName}',
+        '/profile-images/{imageName}',
         'App\Http\Controllers\UserController@getProfileImage'
     );
-    Route::get('/users/search/{user}', 'App\Http\Controllers\UserController@searchUsers');
-    Route::put('/users/{id}', 'App\Http\Controllers\UserController@update');
+    Route::put('/users/{user}', 'App\Http\Controllers\UserController@getUser');
+    Route::get('/users/search/{nick}', 'App\Http\Controllers\UserController@searchUsers');
+    Route::put('/users/{user}', 'App\Http\Controllers\UserController@update');
 
     //Image
     Route::post('/image', 'App\Http\Controllers\ImageController@upload');
