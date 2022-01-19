@@ -23,7 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
         '/profile-images/{imageName}',
         'App\Http\Controllers\UserController@getProfileImage'
     );
-    Route::put('/users/{user}', 'App\Http\Controllers\UserController@getUser');
+    Route::get('/users/{user}', 'App\Http\Controllers\UserController@getUser');
     Route::get('/users/search/{nick}', 'App\Http\Controllers\UserController@searchUsers');
     Route::put('/users/{user}', 'App\Http\Controllers\UserController@update');
 
