@@ -19,7 +19,7 @@ Route::post('/login', 'App\Http\Controllers\UserController@login');
 Route::middleware('auth:sanctum')->group(function () {
     //User
     Route::put('/users/{user}', 'App\Http\Controllers\UserController@update');
-    Route::post('/profile-image', 'App\Http\Controllers\UserController@uploadProfileImage');
+    Route::post('/users/{user}/profile-image', 'App\Http\Controllers\UserController@uploadProfileImage');
     Route::get(
         '/profile-images/{imageName}',
         'App\Http\Controllers\UserController@getProfileImage'
