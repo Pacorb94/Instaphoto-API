@@ -24,12 +24,12 @@ Route::middleware('auth:sanctum')->group(function () {
         'App\Http\Controllers\UserController@getProfileImage'
     );
     Route::get('/users/{user}', 'App\Http\Controllers\UserController@getUser');
-    Route::get('/users/search/{nick}', 'App\Http\Controllers\UserController@searchUsers');
+    Route::get('/users/search/{nick}', 'App\Http\Controllers\UserController@searchUsersByNick');
     Route::put('/users/{user}', 'App\Http\Controllers\UserController@update');
 
     //Image
     Route::post('/image', 'App\Http\Controllers\ImageController@upload');
-    Route::get('/images', 'App\Http\Controllers\HomeController@getImages');
+    Route::get('/images', 'App\Http\Controllers\ImageController@getImages');
     Route::put('/images/{image}', 'App\Http\Controllers\ImageController@update');
     Route::delete('/images/{image}', 'App\Http\Controllers\ImageController@delete');
 
@@ -39,6 +39,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //Like
     Route::post('/images/{image}/like', 'App\Http\Controllers\LikeController@giveLike');
-    Route::get('/likes', 'App\Http\Controllers\LikeController@getLikes');
+    Route::get('/likes', 'App\Http\Controllers\LikeController@getImagesUserLiked');
     Route::delete('/images/{image}/dislike', 'App\Http\Controllers\LikeController@giveDislike');
 });
