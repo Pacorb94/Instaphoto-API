@@ -1,8 +1,8 @@
-# Objetivo
+## Objetivo
 Aprender Laravel
 
 ## Descripción
-Back-end en forma de API RESTful en la que cada usuario puede subir imágenes
+API RESTful en la que cada usuario puede subir imágenes
 y los otros usuarios comentarlas.
 El usuario creador de la imagen puede editar y borra la imagen.
 El usuario creador de la imagen puede borrar comentarios ofensivos.
@@ -22,4 +22,3 @@ El usuario puede buscar imágenes.
 
 ## Licencia
 MIT
-
