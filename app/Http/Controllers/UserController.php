@@ -63,7 +63,8 @@ class UserController extends Controller
         $image = $data['profile_image'];
         //Debemos configurar la fecha y tiempo
         date_default_timezone_set('Europe/Madrid');
-        $imageName = date('d-m-Y_H-i-s') . '_' . $image->getClientOriginalName();
+        $imageName = date('d-m-Y_H-i-s') . '_' .
+            preg_replace('/\s+/', '_', $image->getClientOriginalName());
         //Almacenamos la imagen en la carpeta
         Storage::disk('profile-images')->put($imageName, File::get($image));
         return response(['image' => $imageName], 201);
@@ -72,6 +73,7 @@ class UserController extends Controller
     public function getProfileImage($imageName)
     {
         $folder = Storage::disk('profile-images');
+        $imageName = trim($imageName);
         if ($folder->exists($imageName)) {
             $image = Storage::disk('profile-images')->get($imageName);
             return new Response($image);
