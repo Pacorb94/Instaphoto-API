@@ -12,8 +12,9 @@ use Illuminate\Support\Facades\File;
 
 class ImageController extends Controller
 {
+
     /**
-     * Función que sube una imagen
+     * Función que sube la imagen
      * @param $request
      * @return
      */
@@ -35,12 +36,13 @@ class ImageController extends Controller
         return response($image, 201);  
     }
 
-    /**
-     * Función que modifica una imagen
-     * @param $id
-     * @param $request
-     * @return
-     */
+    public function getImages()
+    {
+        $images=Image::orderBy('id', 'desc')->paginate(5);
+        if ($images) return response($images);
+        return response(['message'=>'No pictures'], 404);      
+    }
+
     public function update($id, Request $request)
     {
         if ($id&&is_numeric($id)) {         
@@ -75,11 +77,6 @@ class ImageController extends Controller
         return response(['message'=>'Wrong id'], 400);
     }
 
-    /**
-     * Función que borra una imagen
-     * @param $id
-     * @return
-     */
     public function delete($id)
     {
         if ($id&&is_numeric($id)) {
