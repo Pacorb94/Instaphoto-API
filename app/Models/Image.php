@@ -21,6 +21,11 @@ class Image extends Model
         'description'
     ];
 
+    public function user()
+    {
+        return $this->hasOne('App\Models\User', 'id', 'user_id');
+    }
+
     public function comments()
     {
         return $this->hasMany('App\Models\Comment', 'image_id', 'id');
