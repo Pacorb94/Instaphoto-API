@@ -14,7 +14,7 @@ class UploadProfileImageRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth()->user() ? true : false;
+        return true;
     }
 
     /**
@@ -25,7 +25,7 @@ class UploadProfileImageRequest extends FormRequest
     public function rules()
     {
         return [
-            'file' => 'required|image|mimes:jpg,jpeg,png,gif'
+            'profile_image' => 'required|image|mimes:jpg,jpeg,png,gif'
         ];
     }
 }
