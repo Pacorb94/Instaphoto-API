@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
     );
     Route::get('/users/{user}', 'App\Http\Controllers\UserController@getUser');
     Route::get('/users/search/{nick}', 'App\Http\Controllers\UserController@searchUsersByNick');
+    Route::get('/logout', 'App\Http\Controllers\UserController@logout');
     Route::put('/users/{user}', 'App\Http\Controllers\UserController@update');
 
     //Image
