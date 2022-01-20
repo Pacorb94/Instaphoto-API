@@ -18,6 +18,7 @@ Route::post('/login', 'App\Http\Controllers\UserController@login');
 
 Route::middleware('auth:sanctum')->group(function () {
     //User
+    Route::put('/users/{user}', 'App\Http\Controllers\UserController@update');
     Route::post('/profile-image', 'App\Http\Controllers\UserController@uploadProfileImage');
     Route::get(
         '/profile-images/{imageName}',
@@ -25,8 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
     );
     Route::get('/users/{user}', 'App\Http\Controllers\UserController@getUser');
     Route::get('/users/search/{nick}', 'App\Http\Controllers\UserController@searchUsersByNick');
-    Route::get('/logout', 'App\Http\Controllers\UserController@logout');
-    Route::put('/users/{user}', 'App\Http\Controllers\UserController@update');
+    Route::post('/logout', 'App\Http\Controllers\UserController@logout');
 
     //Image
     Route::post('/image', 'App\Http\Controllers\ImageController@upload');
