@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -17,11 +17,10 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'role',
         'nick',
         'email',
         'password',
-        'image'
+        'profile_image'
     ];
 
     /**
@@ -34,19 +33,8 @@ class User extends Authenticatable implements JWTSubject
         'remember_token',
     ];
 
-
-    public function getImages()
+    public function images()
     {
         return $this->hasMany('App\Models\Image', 'user_id', 'id');
-    }
-
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-
-    public function getJWTCustomClaims()
-    {
-        return [];
     }
 }

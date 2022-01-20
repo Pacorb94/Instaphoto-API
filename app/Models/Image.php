@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Image extends Model
 {
     use HasFactory;
-    protected $table='images';
-    
+    protected $table = 'images';
+
 
     /**
      * The attributes that are mass assignable.
@@ -21,12 +21,12 @@ class Image extends Model
         'description'
     ];
 
-    public function getComments()
+    public function comments()
     {
         return $this->hasMany('App\Models\Comment', 'image_id', 'id');
     }
 
-    public function getLikes()
+    public function likes()
     {
         return $this->hasMany('App\Models\Like', 'image_id', 'id');
     }

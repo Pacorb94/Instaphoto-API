@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,32 +13,33 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
 Route::post('/register', 'App\Http\Controllers\UserController@register');
 Route::post('/login', 'App\Http\Controllers\UserController@login');
 
-Route::middleware('jwt')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     //User
-    Route::post('/users/{id}/profile-image', 'App\Http\Controllers\UserController@uploadProfileImage');
-    Route::get('/users/profile-images/{imageName}', 
+    Route::put('/users/{user}', 'App\Http\Controllers\UserController@update');
+    Route::post('/profile-image', 'App\Http\Controllers\UserController@uploadProfileImage');
+    Route::get(
+        '/profile-images/{imageName}',
         'App\Http\Controllers\UserController@getProfileImage'
     );
-    Route::get('/users/{id}', 'App\Http\Controllers\UserController@getUser');
-    Route::get('/users/search/{id}', 'App\Http\Controllers\UserController@searchUsers');
-    Route::put('/users/{id}', 'App\Http\Controllers\UserController@update');
+    Route::get('/users/{user}', 'App\Http\Controllers\UserController@getUser');
+    Route::get('/users/search/{nick}', 'App\Http\Controllers\UserController@searchUsersByNick');
+    Route::post('/logout', 'App\Http\Controllers\UserController@logout');
 
     //Image
     Route::post('/image', 'App\Http\Controllers\ImageController@upload');
-    Route::get('/images', 'App\Http\Controllers\HomeController@getImages');
-    Route::put('/images/{id}', 'App\Http\Controllers\ImageController@update');
-    Route::delete('/images/{id}', 'App\Http\Controllers\ImageController@delete');
+    Route::get('/images', 'App\Http\Controllers\ImageController@getImages');
+    Route::put('/images/{image}', 'App\Http\Controllers\ImageController@update');
+    Route::delete('/images/{image}', 'App\Http\Controllers\ImageController@delete');
 
     //Comment
-    Route::post('/images/{imageId}/comment', 'App\Http\Controllers\CommentController@create');
-    Route::delete('/comments/{id}', 'App\Http\Controllers\CommentController@delete');
+    Route::post('/images/{image}/comment', 'App\Http\Controllers\CommentController@create');
+    Route::delete('/comments/{comment}', 'App\Http\Controllers\CommentController@delete');
 
     //Like
-    Route::post('/images/{imageId}/like', 'App\Http\Controllers\LikeController@giveLike');
-    Route::get('/likes', 'App\Http\Controllers\LikeController@getLikes');
-    Route::delete('/images/{imageId}/dislike', 'App\Http\Controllers\LikeController@giveDislike');
+    Route::post('/images/{image}/like', 'App\Http\Controllers\LikeController@giveLike');
+    Route::get('/likes', 'App\Http\Controllers\LikeController@getImagesUserLiked');
+    Route::delete('/images/{image}/dislike', 'App\Http\Controllers\LikeController@giveDislike');
 });

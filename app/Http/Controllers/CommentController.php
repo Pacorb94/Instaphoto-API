@@ -7,15 +7,10 @@ use App\Models\Comment;
 use App\Models\Image;
 use Illuminate\Support\Facades\Validator;
 
+
 class CommentController extends Controller
 {
 
-    /**
-     * Función que crea un comentario
-     * @param $imageId
-     * @param $request
-     * @return
-     */
     public function create($imageId, Request $request)
     {
         if ($imageId&&is_numeric($imageId)) {
@@ -36,11 +31,6 @@ class CommentController extends Controller
         return response(['message'=>'Wrong image id'], 400);
     }
 
-    /**
-     * Función que borra un comentario
-     * @param $id
-     * @return
-     */
     public function delete($id)
     {
         if ($id&&is_numeric($id)) {
