@@ -7,17 +7,17 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\UploadProfileImageRequest;
 use App\Http\Resources\UserResource;
-use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 
 
 class UserController extends Controller
 {
-   
+
     public function register(RegisterRequest $request)
     {
         //Obtenemos los datos validados
@@ -34,12 +34,17 @@ class UserController extends Controller
     {
         //Obtenemos los datos validados
         $data = array_map('trim', $request->input());
-        $user = User::where('email', $data['email'])->first();
+        $user = User::where('email', $data['emailOrNick'])
+            ->orWhere('nick', $data['emailOrNick'])->first();
         if ($user && Hash::check($data['password'], $user->password)) {
             $token = $user->createToken('auth_token')->plainTextToken;
-            return response(['token' => $token]);
+            return response([
+                'user' => $user,
+                'token_type' => 'Bearer',
+                'token' => $token
+            ]);
         }
-        return response(['message' => 'Wrong credentials'], 422);
+        return response(['message' => 'Wrong credentials'], 401);
     }
 
     public function update(User $user, UpdateUserRequest $request)
@@ -55,7 +60,7 @@ class UserController extends Controller
     public function uploadProfileImage(UploadProfileImageRequest $request)
     {
         $data = $request->validated();
-        $image = $data['file'];
+        $image = $data['profile_image'];
         //Debemos configurar la fecha y tiempo
         date_default_timezone_set('Europe/Madrid');
         $imageName = date('d-m-Y_H-i-s') . '_' . $image->getClientOriginalName();
@@ -66,7 +71,6 @@ class UserController extends Controller
 
     public function getProfileImage($imageName)
     {
-        return response($imageName);
         $folder = Storage::disk('profile-images');
         if ($folder->exists($imageName)) {
             $image = Storage::disk('profile-images')->get($imageName);
@@ -74,7 +78,7 @@ class UserController extends Controller
         }
         return response(['message' => 'Profile image not found'], 404);
     }
-    
+
     public function getUser(User $user)
     {
         return response(new UserResource($user));
@@ -90,5 +94,11 @@ class UserController extends Controller
             ->orderBy('id', 'desc')
             ->paginate(5);
         return response($users);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+        return response(['message' => 'Logout successful']);
     }
 }
