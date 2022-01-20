@@ -17,11 +17,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    /**
-     * Función que hace el registro
-     * @param $request
-     * @return
-     */
+   
     public function register(RegisterRequest $request)
     {
         //Obtenemos los datos validados
@@ -34,11 +30,6 @@ class UserController extends Controller
         return response(new UserResource($user), 201);
     }
 
-    /**
-     * Función que hace el login
-     * @param $request
-     * @return
-     */
     public function login(LoginRequest $request)
     {
         //Obtenemos los datos validados
@@ -51,12 +42,6 @@ class UserController extends Controller
         return response(['message' => 'Wrong credentials'], 422);
     }
 
-    /**
-     * Función que modifica un usuario
-     * @param $user
-     * @param $request
-     * @return
-     */
     public function update(User $user, UpdateUserRequest $request)
     {
         $data = array_map('trim', $request->validated());
@@ -67,11 +52,6 @@ class UserController extends Controller
         return response(new UserResource($userUpdated));
     }
 
-    /**
-     * Función que sube una imagen de perfil
-     * @param $request
-     * @return
-     */
     public function uploadProfileImage(UploadProfileImageRequest $request)
     {
         $data = $request->validated();
@@ -84,11 +64,6 @@ class UserController extends Controller
         return response(['image' => $imageName], 201);
     }
 
-    /**
-     * Función que obtiene la imagen de perfil
-     * @param $request
-     * @return
-     */
     public function getProfileImage($imageName)
     {
         return response($imageName);
@@ -100,22 +75,12 @@ class UserController extends Controller
         return response(['message' => 'Profile image not found'], 404);
     }
     
-    /**
-     * Función que obtiene un usuario
-     * @param $user
-     * @return
-     */
     public function getUser(User $user)
     {
         return response(new UserResource($user));
     }
 
-    /**
-     * Función que busca usuarios por una palabra
-     * @param $search
-     * @return
-     */
-    public function searchUsers($nick)
+    public function searchUsersByNick($nick)
     {
         $users = null;
         if ($nick) {
