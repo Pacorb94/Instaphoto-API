@@ -7,12 +7,8 @@ use App\Models\Like;
 
 class LikeController extends Controller
 {
-    /**
-     * Funión que da like a una imagen
-     * @param $imageId
-     * @return
-     */
-    public function like($imageId)
+   
+    public function giveLike($imageId)
     {
         if ($imageId&&is_numeric($imageId)) {
             $image=Image::find($imageId);
@@ -35,11 +31,7 @@ class LikeController extends Controller
         return response(['message'=>'Wrong image id'], 400);
     }
 
-    /**
-     * Función que obtiene las imágenes que el usuario le ha dado like
-     * @return
-     */
-    public function getLikes()
+    public function getImagesUserLiked()
     {
         $likes=Like::where('user_id', auth()->user()->id)->orderBy('id', 'desc')->paginate(5);
         $images=[];
@@ -48,12 +40,7 @@ class LikeController extends Controller
         return response(['user'=>auth()->user(), 'images'=>$images]);
     }
 
-    /**
-     * Funión que da dislike a una imagen
-     * @param $imageId
-     * @return
-     */
-    public function dislike($imageId)
+    public function giveDislike($imageId)
     {
         if ($imageId&&is_numeric($imageId)) {
             $image=Image::find($imageId);
