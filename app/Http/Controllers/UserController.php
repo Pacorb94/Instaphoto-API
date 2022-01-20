@@ -6,6 +6,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\UploadProfileImageRequest;
+use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
@@ -13,7 +14,6 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
-
 
 class UserController extends Controller
 {
@@ -95,7 +95,7 @@ class UserController extends Controller
         $users = User::where('nick', 'like', "%$nick%")
             ->orderBy('id', 'desc')
             ->paginate(5);
-        return response($users);
+        return response(new UserCollection($users));
     }
 
     public function logout(Request $request)
