@@ -14,7 +14,7 @@ class UpdateUserRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth()->user() ? true : false;
+        return true;
     }
 
     /**
