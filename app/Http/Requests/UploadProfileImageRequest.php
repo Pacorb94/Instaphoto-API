@@ -25,7 +25,7 @@ class UploadProfileImageRequest extends FormRequest
     public function rules()
     {
         return [
-            'profile_image' => 'required|image|mimes:jpg,jpeg,png,gif'
+            'profile_image' => 'image|mimes:jpg,jpeg,png,gif'
         ];
     }
 }
