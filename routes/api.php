@@ -19,7 +19,6 @@ Route::post('/login', 'App\Http\Controllers\UserController@login');
 Route::middleware('auth:sanctum')->group(function () {
     //User
     Route::put('/users/{user}', 'App\Http\Controllers\UserController@update');
-    Route::post('/users/{user}/profile-image', 'App\Http\Controllers\UserController@uploadProfileImage');
     Route::get(
         '/profile-images/{imageName}',
         'App\Http\Controllers\UserController@getProfileImage'
@@ -31,11 +30,13 @@ Route::middleware('auth:sanctum')->group(function () {
     //Image
     Route::post('/image', 'App\Http\Controllers\ImageController@create');
     Route::put('/images/{image}', 'App\Http\Controllers\ImageController@update');
+    Route::get('/images/{imageName}', 'App\Http\Controllers\UserController@getImage');
     Route::get('/images', 'App\Http\Controllers\ImageController@getImages');
     Route::delete('/images/{image}', 'App\Http\Controllers\ImageController@delete');
 
     //Comment
     Route::post('/images/{image}/comment', 'App\Http\Controllers\CommentController@create');
+    Route::put('/comments/{comment}', 'App\Http\Controllers\CommentController@update');
     Route::delete('/comments/{comment}', 'App\Http\Controllers\CommentController@delete');
 
     //Like
