@@ -32,9 +32,4 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
-    public function images()
-    {
-        return $this->hasMany('App\Models\Image', 'user_id', 'id');
-    }
 }
