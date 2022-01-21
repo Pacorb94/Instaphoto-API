@@ -91,10 +91,7 @@ class UserController extends Controller
 
     public function searchUsersByNick($nick)
     {
-        $users = null;
-        if ($nick) {
-            $nick = trim($nick);
-        }
+        $nick = trim($nick);  
         $users = User::where('nick', 'like', "%$nick%")
             ->orderBy('id', 'desc')
             ->paginate(5);
