@@ -26,7 +26,7 @@ class CreateImageRequest extends FormRequest
     {
         return [
             'image' => 'required|image|mimes:jpg,jpeg,png,gif',
-            'description' => 'required'
+            'description' => 'nullable'
         ];
     }
 }
