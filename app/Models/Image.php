@@ -23,16 +23,16 @@ class Image extends Model
 
     public function user()
     {
-        return $this->hasOne('App\Models\User', 'id', 'user_id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function comments()
     {
-        return $this->hasMany('App\Models\Comment', 'image_id', 'id');
+        return $this->hasMany(Comment::class, 'image_id', 'id');
     }
 
     public function likes()
     {
-        return $this->hasMany('App\Models\Like', 'image_id', 'id');
+        return $this->hasMany(Like::class, 'image_id', 'id');
     }
 }
