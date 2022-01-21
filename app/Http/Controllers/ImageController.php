@@ -71,7 +71,7 @@ class ImageController extends Controller
             $image->delete();
             //Borramos el archivo de la imagen
             Storage::disk('images')->delete($image->image);
-            return response(['message' => 'Image deleted']);
+            return response(['message' => 'Deleted image']);
         }
         return response(['message' => 'You didn`t create the image'], 400);
     }
