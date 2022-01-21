@@ -17,10 +17,10 @@ class LikeResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user' => new UserResource($this->user),
             'image_id' => $this->image_id,
             'createdAt' => $this->created_at,
-            'updatedAt' => $this->updated_at
+            'updatedAt' => $this->updated_at,
+            'user' => new UserResource($this->user)
         ];
     }
 }
