@@ -55,9 +55,10 @@ class UserController extends Controller
     public function update(User $user, UpdateUserRequest $request)
     {
         $data = $request->validated();
-        $dataWithOutSpaces=$data;
+        $dataWithOutSpaces = $data;
         unset($dataWithOutSpaces['profile_image']);
-        $dataAux=array_map('trim', $dataWithOutSpaces);
+        $dataAux = array_map('trim', $dataWithOutSpaces);
+        //Modificamos los campos excepto el de la imagen de perfil
         $user->fill($dataAux);
         //Borramos la antigua imagen
         Storage::disk('profile-images')->delete($user->profile_image);
@@ -93,11 +94,14 @@ class UserController extends Controller
 
     public function searchUsersByNick($nick)
     {
-        $nick = trim($nick);
-        $users = User::where('nick', 'like', "%$nick%")
-            ->orderBy('id', 'desc')
-            ->paginate(5);
-        return response(new UserCollection($users));
+        if ($nick) {
+            $nick = trim($nick);
+            $users = User::where('nick', 'like', "%$nick%")
+                ->orderBy('id', 'desc')
+                ->paginate(5);
+            return response(new UserCollection($users));
+        }
+        return response([], 204);
     }
 
     public function logout(Request $request)
