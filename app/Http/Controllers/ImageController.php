@@ -73,6 +73,6 @@ class ImageController extends Controller
             Storage::disk('images')->delete($image->image);
             return response(['message' => 'Image deleted']);
         }
-        return response(['message' => 'You didn`t created the image'], 400);
+        return response(['message' => 'You didn`t create the image'], 400);
     }
 }
