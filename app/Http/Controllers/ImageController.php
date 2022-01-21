@@ -66,9 +66,13 @@ class ImageController extends Controller
 
     public function delete(Image $image)
     {
-        $image->delete();
-        //Borramos el archivo de la imagen
-        Storage::disk('images')->delete($image->image);
-        return response(['message' => 'Image deleted']);
+        //Si el usuario es el creó la imagen
+        if ($image->user->id == auth()->user()->id) {
+            $image->delete();
+            //Borramos el archivo de la imagen
+            Storage::disk('images')->delete($image->image);
+            return response(['message' => 'Image deleted']);
+        }
+        return response(['message' => ''], 400);
     }
 }
