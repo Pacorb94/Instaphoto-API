@@ -25,7 +25,7 @@ class UpdateImageRequest extends FormRequest
     public function rules()
     {
         return [
-            'description' => 'sometimes|required'
+            'description' => 'required'
         ];
     }
 }
