@@ -28,7 +28,8 @@ class UpdateUserRequest extends FormRequest
         return [
             'nick' => 'required|unique:users,nick,' . $user->id,
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'required'
+            'password' => 'required',
+            'profile_image' => 'present|image|mimes:jpg,jpeg,png,gif'
         ];
     }
 }
