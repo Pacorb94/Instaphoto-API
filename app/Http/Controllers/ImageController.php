@@ -6,6 +6,7 @@ use App\Http\Requests\CreateOrUpdateImageRequest;
 use App\Http\Resources\ImageCollection;
 use App\Http\Resources\ImageResource;
 use App\Models\Image;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
@@ -29,10 +30,7 @@ class ImageController extends Controller
     public function update(Image $image, CreateOrUpdateImageRequest $request)
     {
         $data = $request->validated();
-        //Si en la petición está la clave 'description'
-        if ($request->has('description')) {
-            $image->description = trim($data['description']);
-        }
+        $image->description = trim($data['description']);
         //Borramos la antigua imagen
         Storage::disk('images')->delete($image->image);
         $image->image = $this->moveImage($data['image']);
@@ -48,6 +46,16 @@ class ImageController extends Controller
             preg_replace('/\s+/', '_', $image->getClientOriginalName());
         $image->move(storage_path() . '\app\images\\', $imageName);
         return $imageName;
+    }
+
+    public function getImage($imageName)
+    {
+        $exists = Storage::disk('images')->exists($imageName);
+        if ($exists) {
+            $image = Storage::disk('images')->get($imageName);
+            return new Response($image);
+        }
+        return response(['message' => 'No exists an image with that name'], 404);
     }
 
     public function getImages()
