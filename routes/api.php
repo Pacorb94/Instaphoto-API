@@ -41,6 +41,5 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //Like
     Route::post('/images/{image}/like', 'App\Http\Controllers\LikeController@giveLike');
-    Route::get('/likes', 'App\Http\Controllers\LikeController@getImagesUserLiked');
     Route::delete('/images/{image}/dislike', 'App\Http\Controllers\LikeController@giveDislike');
 });
