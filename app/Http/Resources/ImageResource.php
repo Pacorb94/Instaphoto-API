@@ -22,8 +22,8 @@ class ImageResource extends JsonResource
             'user' => new UserResource($this->user),
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
-            'likes' => $this->likes,
-            'comments' => $this->comments
+            'likes' => LikeResource::collection($this->likes),
+            'comments' => CommentResource::collection($this->comments)
         ];
     }
 }
