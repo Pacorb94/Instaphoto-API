@@ -10,15 +10,12 @@ El usuario creador del comentario puede borralo.
 El usuario puede editar su perfil.
 El usuario puede buscar imágenes.
 
-## Requisitos
-* Composer 2
-* MySQL o MariaDB
-* PHP 8 (puedes probar tu versión)
 
-## Pasos a seguir
-1. En un sistema gestor de bbdd importar database.sql de la carpeta database
-2. `composer install`
-3. Si no tienes XAMPP puedes usar `php artisan serve` sino despliega en htdocs
+## Despliegue en producción
+0. Si no tienes Docker Compose instálalo.
+1. Crea los contenedores `docker-compose up -d --build`
+2. Ejecuta las migraciones `docker-compose exec php php artisan migrate`
+3. En el navegador pon `http://localhost:9080`
 
 ## Licencia
 MIT
