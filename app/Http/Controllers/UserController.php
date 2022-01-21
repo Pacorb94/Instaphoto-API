@@ -27,7 +27,11 @@ class UserController extends Controller
         $data['password'] = Hash::make($data['password']);
         $user = new User($data);
         $user->save();
-        return response(new UserResource($user), 201);
+        $token = $user->createToken('auth_token')->plainTextToken;
+        return response([
+            'user' => new UserResource($user),
+            'token_saved_as' => 'HTTPS Cookie'
+        ])->withCookie(cookie('token', $token, 525600, '/', null, true, true));
     }
 
     public function login(LoginRequest $request)
@@ -39,10 +43,9 @@ class UserController extends Controller
         if ($user && Hash::check($data['password'], $user->password)) {
             $token = $user->createToken('auth_token')->plainTextToken;
             return response([
-                'user' => $user,
-                'token_type' => 'Bearer',
-                'token' => $token
-            ]);
+                'user' => new UserResource($user),
+                'token_saved_as' => 'HTTPS Cookie'
+            ])->withCookie(cookie('token', $token, 525600, '/', null, true, true));
         }
         return response(['message' => 'Wrong credentials'], 401);
     }
