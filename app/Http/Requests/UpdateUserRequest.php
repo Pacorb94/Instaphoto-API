@@ -24,11 +24,11 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules()
     {
-        $user=auth()->user();
+        $user = auth()->user();
         //sometimes permite validar si está presente la clave en el payload
         return [
-            'nick' => 'sometimes|required|unique:users,nick,'.$user->id,
-            'email' => 'sometimes|required|email|unique:users,email,'.$user->id,
+            'nick' => 'sometimes|required|unique:users,nick,' . $user->id,
+            'email' => 'sometimes|required|email|unique:users,email,' . $user->id,
             'password' => 'sometimes|required'
         ];
     }
