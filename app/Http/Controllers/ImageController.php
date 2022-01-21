@@ -48,14 +48,14 @@ class ImageController extends Controller
         return $imageName;
     }
 
-    public function getImage($imageName)
+    public function getImageFile($fileName)
     {
-        $exists = Storage::disk('images')->exists($imageName);
+        $exists = Storage::disk('images')->exists($fileName);
         if ($exists) {
-            $image = Storage::disk('images')->get($imageName);
+            $image = Storage::disk('images')->get($fileName);
             return new Response($image);
         }
-        return response(['message' => 'No exists an image with that name'], 404);
+        return response(['message' => 'No exists an file with that name'], 404);
     }
 
     public function getImages()
@@ -66,19 +66,8 @@ class ImageController extends Controller
 
     public function delete(Image $image)
     {
-        //TODO: VER SI SE BORRAN CON ON CASCADE
-        // if (count($image->comments) > 0) {
-        //     foreach ($image->comments as $comment) {
-        //         $comment->delete();
-        //     }
-        // }
-        // if (count($image->likes) > 0) {
-        //     foreach ($image->likes as $like) {
-        //         $like->delete();
-        //     }
-        // }
         $image->delete();
-        //Borramos la imagen
+        //Borramos el archivo de la imagen
         Storage::disk('images')->delete($image->image);
         return response(['message' => 'Image deleted']);
     }
