@@ -19,9 +19,9 @@ class ImageResource extends JsonResource
             'id' => $this->id,
             'image' => $this->image,
             'description' => $this->description,
-            'user' => new UserResource($this->user),
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
+            'user' => new UserResource($this->user),
             'likes' => LikeResource::collection($this->likes),
             'comments' => CommentResource::collection($this->comments)
         ];
