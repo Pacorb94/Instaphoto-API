@@ -66,7 +66,7 @@ class ImageController extends Controller
 
     public function delete(Image $image)
     {
-        //VER SI SE BORRAN CON ON CASCADE
+        //TODO: VER SI SE BORRAN CON ON CASCADE
         // if (count($image->comments) > 0) {
         //     foreach ($image->comments as $comment) {
         //         $comment->delete();
