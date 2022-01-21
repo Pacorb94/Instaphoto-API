@@ -23,8 +23,7 @@ class UserController extends Controller
     public function register(RegisterRequest $request)
     {
         //Obtenemos los datos validados
-        $data = $request->validated();
-        $data = array_map('trim', $data);
+        $data = array_map('trim', $request->validated());
         //Ciframos la contraseña
         $data['password'] = Hash::make($data['password']);
         $user = new User($data);
@@ -39,7 +38,7 @@ class UserController extends Controller
     public function login(LoginRequest $request)
     {
         //Obtenemos los datos validados
-        $data = array_map('trim', $request->input());
+        $data = array_map('trim', $request->validated());
         $user = User::where('email', $data['emailOrNick'])
             ->orWhere('nick', $data['emailOrNick'])->first();
         if ($user && Hash::check($data['password'], $user->password)) {
@@ -94,14 +93,11 @@ class UserController extends Controller
 
     public function searchUsersByNick($nick)
     {
-        if ($nick) {
-            $nick = trim($nick);
-            $users = User::where('nick', 'like', "%$nick%")
-                ->orderBy('id', 'desc')
-                ->paginate(5);
-            return response(new UserCollection($users));
-        }
-        return response([], 204);
+        $nick = trim($nick);
+        $users = User::where('nick', 'like', "%$nick%")
+            ->orderBy('id', 'desc')
+            ->paginate(5);
+        return response(new UserCollection($users));
     }
 
     public function logout(Request $request)
