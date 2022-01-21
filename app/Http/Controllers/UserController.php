@@ -57,7 +57,7 @@ class UserController extends Controller
         $dataWithOutSpaces = $data;
         unset($dataWithOutSpaces['profile_image']);
         $dataAux = array_map('trim', $dataWithOutSpaces);
-        //Modificamos los campos excepto el de la imagen de perfil
+        //Asignamos los campos excepto el de la imagen de perfil
         $user->fill($dataAux);
         //Borramos la antigua imagen
         Storage::disk('profile-images')->delete($user->profile_image);
