@@ -30,7 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
     //Image
     Route::post('/image', 'App\Http\Controllers\ImageController@create');
     Route::put('/images/{image}', 'App\Http\Controllers\ImageController@update');
-    Route::get('/images/{imageName}', 'App\Http\Controllers\ImageController@getImage');
+    Route::get('/image-files/{fileName}', 'App\Http\Controllers\ImageController@getImageFile');
     Route::get('/images', 'App\Http\Controllers\ImageController@getImages');
     Route::delete('/images/{image}', 'App\Http\Controllers\ImageController@delete');
 
