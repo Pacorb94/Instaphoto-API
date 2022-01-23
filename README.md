@@ -15,7 +15,7 @@ El usuario puede buscar imágenes.
 0. Si no tienes Docker Compose instálalo.
 1. Crea los contenedores `docker-compose up -d --build`
 2. Ejecuta las migraciones `docker-compose exec php php artisan migrate`
-3. En el navegador pon `http://localhost:9080`
+3. URL de la API `http://localhost:9080`
 
 ## Licencia
 MIT
